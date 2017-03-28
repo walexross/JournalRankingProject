@@ -8,31 +8,34 @@ import xlwt
 from tempfile import TemporaryFile
  
 class JournalAlgorithm:
-     
+#     define a new class and set category,year, and #of years as the parameter from user input.
     def computeFiveYrAvg(category,year,noYears):
         arrayOfTitles=[]
         fiveYrAvg=[]
         sortedList=[]
         try:
+#        Calculate five years to retrive data from db
             lastYear = year -5
             blwYear = year+1
+#        Connect db
             db = pymysql.connect(host='10.36.0.145',    
                      user='isajournal406',         
                      password='skip406', 
                      db='isajournals',
                      cursorclass=pymysql.cursors.DictCursor
                      )
+#           Execute the query 
             with db.cursor() as cursor:
                 query = "SELECT DISTINCT `Full JOURNAL TITLE` FROM journal WHERE category = '" + category + "';"
                 cursor.execute(query)
                 result=cursor.fetchall()
                 data=result
-         
+         # Put all journal titles in a list
             for j in range (0,len(data)):
                 arrayOfTitles.append(data[j]['Full JOURNAL TITLE'])
          
                 journal = []
-         
+         # loop every element in title list and use the title name, category,year to retrieve five year impactor
             for i in range (0,arrayOfTitles.__len__()):
                 jTitle = arrayOfTitles[i]
                 journalImp=[]
